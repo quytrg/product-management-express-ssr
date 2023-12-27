@@ -25,7 +25,6 @@ module.exports.index = async (req, res) => {
        find.title = searchObject.regex
     }
 
-    
     // pagination
     let initPagination = {
         currentPage: 1,
@@ -34,8 +33,18 @@ module.exports.index = async (req, res) => {
     initPagination.totalProduct = await Product.count(find)
     const paginationObject = paginationHelper(req.query, initPagination)
 
+    //sort
+    const sortMethod = {}
+
+    if (req.query.sortKey && req.query.sortValue) {
+        sortMethod[req.query.sortKey] = req.query.sortValue
+    }
+    else {
+        sortMethod.position = 'desc'
+    }
+
     const products = await Product.find(find)
-                                .sort({ position: 'desc' })
+                                .sort(sortMethod)
                                 .limit(paginationObject.limit)
                                 .skip(paginationObject.skip)
 

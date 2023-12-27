@@ -220,3 +220,39 @@ if (uploadImage) {
     }
 }
 // End image upload
+
+// Sort product
+const sort = document.querySelector('[sort]')
+if (sort) {
+    const sortSelect = sort.querySelector('[sort-select]')
+
+    const url = new URL(window.location.href)
+
+
+    sortSelect.addEventListener('change', (e) => {
+        const [sortKey, sortValue] = sortSelect.value.split('-')
+
+        url.searchParams.set('sortKey', sortKey)
+        url.searchParams.set('sortValue', sortValue)
+
+        window.location.href = url.href
+    })
+
+    const sortKey = url.searchParams.get('sortKey')
+    const sortValue = url.searchParams.get('sortValue')
+
+    if (sortKey && sortValue) {
+        const sortInfo = `${sortKey}-${sortValue}`
+        const selectedOption = sortSelect.querySelector(`option[value='${sortInfo}']`)
+        selectedOption.selected = true
+    }
+
+    const clearButton = sort.querySelector('[sort-clear]')
+    clearButton.addEventListener('click', (e) => {
+        url.searchParams.delete('sortKey')
+        url.searchParams.delete('sortValue')
+
+        window.location.href = url.href
+    })
+}
+// End sort product
