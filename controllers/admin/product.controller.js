@@ -126,10 +126,6 @@ module.exports.createPost = async (req, res) => {
     else {
         req.body.position = await Product.count() + 1
     }
-
-    if (req.file) {
-        req.body.thumbnail = `/uploads/${req.file.filename}`
-    }
     
     const doc = await Product.create(req.body)
     await doc.save()
@@ -167,10 +163,6 @@ module.exports.editPatch = async (req, res) => {
     } 
     else {
         req.body.position = await Product.count() + 1
-    }
-
-    if (req.file) {
-        req.body.thumbnail = `/uploads/${req.file.filename}`
     }
     
     await Product.findOneAndUpdate({ _id: req.params.id }, req.body)
