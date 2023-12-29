@@ -10,7 +10,7 @@ function createTree(arr, parentId="") {
             index++
             newItem.index = index
 
-            const children = createTree(arr, element._id)
+            const children = createTree(arr, element.id)
             if (children.length > 0) {
                 newItem.children = children
             }
