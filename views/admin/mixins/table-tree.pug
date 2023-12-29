@@ -1,0 +1,59 @@
+mixin table-tree(tree, level=1)
+    - const prefix = Array(level + 1).join('-- ')
+    each item in tree
+        tr
+            //- td 
+            //-     input(
+            //-         type="checkbox"
+            //-         name="id"
+            //-         value=item.id
+            //-     )
+            td #{item.index} 
+            td 
+                img(
+                    src=item.thumbnail
+                    alt=item.title 
+                    width="100px"
+                    height="auto"
+                ) 
+            td #{prefix}#{item.title} 
+            td 
+                input(
+                    type="number"
+                    name="position"
+                    value=item.position
+                    style="width: 60px"
+                    min="1"
+                )
+            td 
+                if item.status == 'active'
+                    button(
+                        class="btn btn-sm btn-success"
+                        button-change-status
+                        data-status=item.status
+                        data-id=item.id
+                    ) Hoạt động 
+                else 
+                    button(
+                        class="btn btn-sm btn-danger"
+                        button-change-status
+                        data-status=item.status
+                        data-id=item.id
+                    ) Dừng hoạt động
+            td 
+                a(
+                    href=`/${prefixAdmin}/product/details/${item.id}`
+                    class="btn btn-secondary btn-sm me-1"
+                ) Chi tiết
+                a(
+                    href=`/${prefixAdmin}/product/edit/${item.id}`
+                    class="btn btn-warning btn-sm"
+                ) Sửa
+                button(
+                    class="btn btn-danger btn-sm ms-1"
+                    delete-button
+                    data-id=item.id
+                ) Xóa
+        
+        if (item.children && item.children.length > 0)
+            +table-tree(item.children, level + 1)

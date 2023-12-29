@@ -118,7 +118,7 @@ module.exports.deleteItem = async (req, res) => {
 // [GET] /admin/product/create
 module.exports.create = async (req, res) => {
     res.render(`${systemConfig.prefixAdmin}/pages/product/create.pug`, {
-        titlePage: 'Create product',
+        titlePage: 'Create Product',
     })
 }
 
@@ -150,7 +150,7 @@ module.exports.edit = async (req, res) => {
         const product = await Product.findById({ _id: req.params.id })
 
         res.render(`${systemConfig.prefixAdmin}/pages/product/edit.pug`, {
-            titlePage: 'Edit product',
+            titlePage: 'Edit Product',
             product
         })
     } catch (error) {
