@@ -1,0 +1,41 @@
+extend ../../layouts/default.pug 
+include ../../mixins/alert.pug
+
+block main 
+    h1(class="mb-4") Tạo nhóm quyền
+
+    +alert-error(3000)
+    form(
+        action=`/${prefixAdmin}/roles/create`
+        method="POST"
+    )
+        .mb-3 
+            label(
+                for="title"
+                class="form-label"
+            ) Tiêu đề
+            input(
+                type="text"
+                id="title"
+                name="title"
+                class="form-control"
+                required
+            )
+        .mb-3 
+            label(
+                for="desc"
+                class="form-label"
+            ) Mô tả
+            textarea(
+                id="desc"
+                name="description"
+                class="form-control"
+                rows="5"
+            )
+        .mb-3
+            button(
+                class="btn btn-primary"
+                type="submit"
+            ) Tạo mới
+            
+

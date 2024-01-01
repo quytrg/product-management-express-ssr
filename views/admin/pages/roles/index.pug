@@ -1,0 +1,71 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+    h1(class="mb-4") Danh sách nhóm quyền
+
+    .card.mb-3 
+        .card-header Danh sách
+        .card-body
+            .row 
+                .col-9
+                .col-3.d-flex.justify-content-end
+                    a(
+                        href=`/${prefixAdmin}/roles/create`
+                        class="btn btn-outline-success"
+                    ) + Thêm mới
+            .row
+                table(
+                    class="table table-hover table-sm"
+                )
+                    thead
+                        tr(class="mid-pos")
+                            th STT
+                            th Nhóm quyền
+                            th Mô tả ngắn
+                            th Hành động
+
+                    tbody
+                        if (roles.length)
+                            each role, index in roles 
+                                tr 
+                                    td #{index + 1} 
+                                    td #{role.title}
+                                    td #{role.description}
+                                    td 
+                                        a(
+                                            href=`/${prefixAdmin}/roles/details/${role.id}`
+                                            class="btn btn-secondary btn-sm me-1"
+                                        ) Chi tiết
+                                        a(
+                                            href=`/${prefixAdmin}/roles/edit/${role.id}`
+                                            class="btn btn-warning btn-sm"
+                                        ) Sửa
+                                        button(
+                                            class="btn btn-danger btn-sm ms-1"
+                                            delete-button
+                                            data-id=role.id
+                                        ) Xóa
+
+                        else 
+                            tr 
+                                td(
+                                    colspan="8"
+                                ) 
+                                    div(
+                                        class="text-center"
+                                    ) Không tìm thấy nhóm quyền nào
+
+                //- form(
+                //-     id='form-change-status',
+                //-     method='POST',
+                //-     action='',
+                //-     data-path=`/${prefixAdmin}/products-category/change-status`
+                //- )
+
+                form(
+                    id='form-delete-item',
+                    method='POST',
+                    action='',
+                    data-path=`/${prefixAdmin}/roles/delete`
+                )
