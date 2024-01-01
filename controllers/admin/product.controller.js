@@ -1,10 +1,13 @@
 const Product = require('../../models/product.model.js')
+const ProductCategory = require('../../models/product-category.model.js')
 
 const systemConfig = require('../../config/system/index')
 const filterStatusHelper = require('../../helpers/filterStatus.js')
 const searchHelper = require('../../helpers/search.js')
 const paginationHelper = require('../../helpers/pagination.js')
 const bodyParser = require('body-parser')
+
+const treeHelper = require('../../helpers/tree.js')
 
 // [GET] /admin/product
 module.exports.index = async (req, res) => {
@@ -117,8 +120,16 @@ module.exports.deleteItem = async (req, res) => {
 
 // [GET] /admin/product/create
 module.exports.create = async (req, res) => {
+    const filter = {
+        deleted: false
+    }
+
+    const categories = await ProductCategory.find(filter)
+    const categoryTree = treeHelper.create(Array.from(categories))
+
     res.render(`${systemConfig.prefixAdmin}/pages/product/create.pug`, {
         titlePage: 'Create Product',
+        categoryTree
     })
 }
 
@@ -149,9 +160,17 @@ module.exports.edit = async (req, res) => {
     try {
         const product = await Product.findById({ _id: req.params.id })
 
+        const filter = {
+            deleted: false
+        }
+    
+        const categories = await ProductCategory.find(filter)
+        const categoryTree = treeHelper.create(Array.from(categories))
+
         res.render(`${systemConfig.prefixAdmin}/pages/product/edit.pug`, {
             titlePage: 'Edit Product',
-            product
+            product,
+            categoryTree
         })
     } catch (error) {
         res.redirect(`/${systemConfig.prefixAdmin}/product`)

@@ -1,5 +1,6 @@
 extend ../../layouts/default.pug 
 include ../../mixins/alert.pug
+include ../../mixins/select-tree.pug
 
 block main 
     +alert-success(3000)
@@ -22,6 +23,16 @@ block main
                 class="form-control"
                 value=product.title
             )
+        .mb-3 
+            label(for="category_id" class="form-label") Danh mục
+                select(
+                    name='category_id'
+                    id='category_id'
+                    class='form-control'
+                )
+                    option(value="") -- Chọn danh mục --
+                    if(categoryTree)
+                        +select-tree(categoryTree, 1, product.category_id)
         .mb-3 
             label(
                 for="desc"
