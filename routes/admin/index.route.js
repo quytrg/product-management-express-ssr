@@ -3,12 +3,39 @@ const productRouter = require('./product.route.js')
 const productCategoryRouter = require('./product-category.route.js')
 const roleRouter = require('./role.route.js')
 const accountRouter = require('./account.route.js')
+const authRouter = require('./auth.route.js')
+
+const authMiddleware = require('../../middlewares/admin/auth.middleware.js')
 
 module.exports = (app) => {
     const PATH_ADMIN = '/' + app.locals.prefixAdmin
-    app.use(PATH_ADMIN + '/dashboard', dashboardRouter)
-    app.use(PATH_ADMIN + '/product', productRouter)
-    app.use(PATH_ADMIN + '/product-category', productCategoryRouter)
-    app.use(PATH_ADMIN + '/roles', roleRouter)
-    app.use(PATH_ADMIN + '/accounts', accountRouter)
+    app.use(
+        PATH_ADMIN + '/dashboard',
+        authMiddleware.requireAuth,
+        dashboardRouter
+    )
+    app.use(
+        PATH_ADMIN + '/product',
+        authMiddleware.requireAuth,
+        productRouter
+    )
+    app.use(
+        PATH_ADMIN + '/product-category',
+        authMiddleware.requireAuth,
+        productCategoryRouter
+    )
+    app.use(
+        PATH_ADMIN + '/roles',
+        authMiddleware.requireAuth,
+        roleRouter
+    )
+    app.use(
+        PATH_ADMIN + '/accounts',
+        authMiddleware.requireAuth,
+        accountRouter
+    )
+    app.use(
+        PATH_ADMIN + '/auth',
+        authRouter
+    )
 }   
