@@ -2,6 +2,7 @@ const dashboardRouter = require('./dashboard.route.js')
 const productRouter = require('./product.route.js')
 const productCategoryRouter = require('./product-category.route.js')
 const roleRouter = require('./role.route.js')
+const accountRouter = require('./account.route.js')
 
 module.exports = (app) => {
     const PATH_ADMIN = '/' + app.locals.prefixAdmin
@@ -9,4 +10,5 @@ module.exports = (app) => {
     app.use(PATH_ADMIN + '/product', productRouter)
     app.use(PATH_ADMIN + '/product-category', productCategoryRouter)
     app.use(PATH_ADMIN + '/roles', roleRouter)
+    app.use(PATH_ADMIN + '/accounts', accountRouter)
 }   

@@ -1,0 +1,73 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+    h1(class="mb-4") Danh sách tài khoản
+
+    +alert-success(3000)
+    +alert-error(3000)
+
+    .card.mb-3
+        .card-header Danh sách
+        .card-body
+            .row
+                .col-8
+                .col-4.text-end
+                    a(
+                        href=`/${prefixAdmin}/accounts/create`
+                        class="btn btn-outline-success mb-20"
+                    ) + Thêm mới
+
+            table(
+                class="table table-hover table-sm"
+            )
+                thead
+                    tr(class='mid-pos')
+                        th(class='text-center align-middle') STT
+                        th(class='text-center align-middle') Hình ảnh
+                        th(class='text-center align-middle') Họ tên
+                        th(class='text-center align-middle') Phân quyền
+                        th(class='text-center align-middle') Email
+                        th(class='text-center align-middle') Trạng thái
+                        th(class='text-center align-middle') Hành động
+
+                tbody
+                    each account, index in accounts
+                        tr
+                            td(class='text-center align-middle') #{index+1}
+                            td(class='text-center align-middle')
+                                img(
+                                    src=account.avatar
+                                    alt=account.fullName
+                                    width="100px"
+                                    height="auto"
+                                )
+                            td(class='text-center align-middle') #{account.fullName}
+                            td(class='text-center align-middle') #{account.role.title}
+                            td(class='text-center align-middle') #{account.email}
+                            td(class='text-center align-middle')
+                                if (account.status === "active")
+                                    a(
+                                        href=""
+                                        class="btn btn-sm btn-success"
+                                        data-status="active"
+                                    ) Hoạt động
+                                else
+                                    a(
+                                        href=""
+                                        class="btn btn-sm btn-danger"
+                                        data-status="inactive"
+                                    ) Dừng hoạt động
+                            td(class='text-center align-middle')
+                                a(
+                                    class="btn btn-secondary btn-sm me-1"
+                                    href=`/${prefixAdmin}/accounts/detail/${account.id}`
+                                ) Chi tiết
+                                a(
+                                    class="btn btn-warning btn-sm"
+                                    href=`/${prefixAdmin}/accounts/edit/${account.id}`
+                                ) Chỉnh sửa
+                                button(
+                                    class="btn btn-danger btn-sm ms-1"
+                                ) Xoá
+
