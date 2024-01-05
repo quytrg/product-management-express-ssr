@@ -48,7 +48,7 @@ module.exports.loginPost = async (req, res) => {
             return
         }
 
-        res.cookie('token', user.token, { expires: new Date(Date.now() + 900000), httpOnly: true })
+        res.cookie('token', user.token, { expires: new Date(Date.now() + 86400000), httpOnly: true })
         res.redirect(`/${systemConfig.prefixAdmin}/dashboard`)
         
     } catch (error) {
