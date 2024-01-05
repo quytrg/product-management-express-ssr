@@ -1,5 +1,6 @@
 const Product = require('../../models/product.model.js')
 const ProductCategory = require('../../models/product-category.model.js')
+const Account = require('../../models/account.model.js')
 
 const systemConfig = require('../../config/system/index')
 const filterStatusHelper = require('../../helpers/filterStatus.js')
@@ -50,6 +51,15 @@ module.exports.index = async (req, res) => {
                                 .sort(sortMethod)
                                 .limit(paginationObject.limit)
                                 .skip(paginationObject.skip)
+
+    // creating info
+    for (const product of products) {
+        const account = await Account.findOne({ _id: product.createdBy.account_id })
+        
+        if (account) {
+            product.createdBy.accountName = account.fullName
+        }
+    }
 
     res.render(`${systemConfig.prefixAdmin}/pages/product/index.pug`, {
         titlePage: 'Product',
@@ -145,6 +155,10 @@ module.exports.createPost = async (req, res) => {
     } 
     else {
         req.body.position = await Product.count() + 1
+    }
+
+    req.body.createdBy = {
+        account_id: res.locals.user.id
     }
     
     const doc = await Product.create(req.body)

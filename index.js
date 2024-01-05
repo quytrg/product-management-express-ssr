@@ -7,7 +7,8 @@ const bodyParser = require('body-parser')
 const flash = require('express-flash')
 const cookieParser = require('cookie-parser')   
 const session = require('express-session')
-const path = require('path');
+const path = require('path')
+const moment = require('moment')
 
 const routeClient = require('./routes/client/index.route.js')
 const routeAdmin = require('./routes/admin/index.route.js')
@@ -39,6 +40,7 @@ app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce
 
 // local variables within the application
 app.locals.prefixAdmin = systemConfig.prefixAdmin
+app.locals.moment = moment
 
 // Routes client
 routeClient(app)
