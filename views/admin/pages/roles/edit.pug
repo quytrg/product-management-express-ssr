@@ -2,41 +2,47 @@ extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
 block main 
-    h1(class="mb-4") Tạo nhóm quyền
+    if(role.permissions.includes("roles_edit"))
+        h1(class="mb-4") Chỉnh sửa nhóm quyền
 
-    +alert-success(3000)
-    form(
-        action=`/${prefixAdmin}/roles/edit/${role.id}?_method=PATCH`
-        method="POST"
-    )
-        .mb-3 
-            label(
-                for="title"
-                class="form-label"
-            ) Tiêu đề
-            input(
-                type="text"
-                id="title"
-                name="title"
-                class="form-control"
-                required
-                value=role.title
-            )
-        .mb-3 
-            label(
-                for="desc"
-                class="form-label"
-            ) Mô tả
-            textarea(
-                id="desc"
-                name="description"
-                class="form-control"
-                rows="5"
-            ) #{role.description}
-        .mb-3
-            button(
-                class="btn btn-primary"
-                type="submit"
-            ) Cập nhật
-            
-
+        +alert-success(3000)
+        form(
+            action=`/${prefixAdmin}/roles/edit/${record.id}?_method=PATCH`
+            method="POST"
+        )
+            .mb-3 
+                label(
+                    for="title"
+                    class="form-label"
+                ) Tiêu đề
+                input(
+                    type="text"
+                    id="title"
+                    name="title"
+                    class="form-control"
+                    required
+                    value=record.title
+                )
+            .mb-3 
+                label(
+                    for="desc"
+                    class="form-label"
+                ) Mô tả
+                textarea(
+                    id="desc"
+                    name="description"
+                    class="form-control"
+                    rows="5"
+                ) #{record.description}
+            .mb-3
+                button(
+                    class="btn btn-primary"
+                    type="submit"
+                ) Cập nhật
+                
+    else 
+        div(class='mt-20')
+            h4 Account does not have permission to view this page
+            i Contact 
+            strong administrator
+            i  to add permissions to your account

@@ -35,11 +35,11 @@ module.exports.createPost = async (req, res) => {
 // [GET] /admin/roles/edit/:id
 module.exports.edit = async (req, res) => {
     try {
-        const role = await Role.findById({ _id: req.params.id })
+        const record = await Role.findById({ _id: req.params.id })
 
         res.render(`${systemConfig.prefixAdmin}/pages/roles/edit.pug`, {
             titlePage: 'Edit Role',
-            role
+            record
         })
     } catch (error) {
         res.redirect(`/${systemConfig.prefixAdmin}/roles`)

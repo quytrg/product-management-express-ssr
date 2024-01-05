@@ -14,10 +14,11 @@ block main
                 .row
                     .col-8
                     .col-4.text-end
-                        a(
-                            href=`/${prefixAdmin}/accounts/create`
-                            class="btn btn-outline-success mb-20"
-                        ) + Thêm mới
+                        if(role.permissions.includes("accounts_create"))
+                            a(
+                                href=`/${prefixAdmin}/accounts/create`
+                                class="btn btn-outline-success mb-20"
+                            ) + Thêm mới
 
                 table(
                     class="table table-hover table-sm"
@@ -64,10 +65,11 @@ block main
                                         class="btn btn-secondary btn-sm me-1"
                                         href=`/${prefixAdmin}/accounts/detail/${account.id}`
                                     ) Chi tiết
-                                    a(
-                                        class="btn btn-warning btn-sm"
-                                        href=`/${prefixAdmin}/accounts/edit/${account.id}`
-                                    ) Chỉnh sửa
+                                    if(role.permissions.includes("accounts_edit"))
+                                        a(
+                                            class="btn btn-warning btn-sm"
+                                            href=`/${prefixAdmin}/accounts/edit/${account.id}`
+                                        ) Chỉnh sửa
                                     button(
                                         class="btn btn-danger btn-sm ms-1"
                                     ) Xoá

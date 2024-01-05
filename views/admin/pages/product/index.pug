@@ -31,10 +31,11 @@ block main
                     .col-9
                         +form-change-multi(`/${prefixAdmin}/product/change-multi?_method=PATCH`)
                     .col-3
-                        a(
-                            href=`/${prefixAdmin}/product/create`
-                            class="btn btn-outline-success ms-5"
-                        ) + Thêm sản phẩm
+                        if(role.permissions.includes("product_create"))
+                            a(
+                                href=`/${prefixAdmin}/product/create`
+                                class="btn btn-outline-success ms-5"
+                            ) + Thêm sản phẩm
                 table(
                     class="table table-hover table-sm"
                     multi-checkbox
@@ -101,15 +102,17 @@ block main
                                             href=`/${prefixAdmin}/product/details/${item.id}`
                                             class="btn btn-secondary btn-sm me-1"
                                         ) Chi tiết
-                                        a(
-                                            href=`/${prefixAdmin}/product/edit/${item.id}`
-                                            class="btn btn-warning btn-sm"
-                                        ) Sửa
-                                        button(
-                                            class="btn btn-danger btn-sm ms-1"
-                                            delete-button
-                                            data-id=item.id
-                                        ) Xóa
+                                        if(role.permissions.includes("product_edit"))
+                                            a(
+                                                href=`/${prefixAdmin}/product/edit/${item.id}`
+                                                class="btn btn-warning btn-sm"
+                                            ) Sửa
+                                        if(role.permissions.includes("product_delete"))
+                                            button(
+                                                class="btn btn-danger btn-sm ms-1"
+                                                delete-button
+                                                data-id=item.id
+                                            ) Xóa
                         else 
                             tr 
                                 td(

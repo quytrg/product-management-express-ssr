@@ -45,10 +45,11 @@ mixin table-tree(tree, level=1)
                     href=`/${prefixAdmin}/product-category/details/${item.id}`
                     class="btn btn-secondary btn-sm me-1"
                 ) Chi tiết
-                a(
-                    href=`/${prefixAdmin}/product-category/edit/${item.id}`
-                    class="btn btn-warning btn-sm"
-                ) Sửa
+                if(role.permissions.includes("products-category_edit"))
+                    a(
+                        href=`/${prefixAdmin}/product-category/edit/${item.id}`
+                        class="btn btn-warning btn-sm"
+                    ) Sửa
                 button(
                     class="btn btn-danger btn-sm ms-1"
                     delete-button
