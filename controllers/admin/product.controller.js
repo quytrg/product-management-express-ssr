@@ -54,10 +54,18 @@ module.exports.index = async (req, res) => {
 
     // creating info
     for (const product of products) {
-        const account = await Account.findOne({ _id: product.createdBy.account_id })
+        const accountCreated = await Account.findOne({ _id: product.createdBy.account_id })
         
-        if (account) {
-            product.createdBy.accountName = account.fullName
+        if (accountCreated) {
+            product.createdBy.accountName = accountCreated.fullName
+        }
+
+        const accountIdUpdated = product.updatedBy[product.updatedBy.length - 1]
+        if (accountIdUpdated) {
+            const accountUpdated = await Account.findOne({ _id: accountIdUpdated.account_id })
+            if (accountUpdated) {
+                product.updatedBy[product.updatedBy.length - 1].accountName = accountUpdated.fullName
+            }
         }
     }
 
@@ -72,9 +80,20 @@ module.exports.index = async (req, res) => {
 
 // [PATCH] /admin/product/change-status/:status/:id
 module.exports.changeStatus = async (req, res) => {
+    const updatedBy = {
+        account_id: res.locals.user.id,
+        updatedAt: new Date()
+    }
+
     const { status, id } = req.params
 
-    await Product.updateOne({ _id: id}, {status: status})
+    await Product.updateOne(
+        { _id: id }, 
+        { 
+            status: status,
+            $push: { updatedBy: updatedBy }
+        }
+    )
 
     req.flash('changeSuccess', 'Trang thái đã được thay đổi thành công!')
 
@@ -83,6 +102,10 @@ module.exports.changeStatus = async (req, res) => {
 
 // [PATCH] /admin/product/change-multi
 module.exports.changeMulti = async (req, res) => {
+    const updatedBy = {
+        account_id: res.locals.user.id,
+        updatedAt: new Date()
+    }
     
     const { type, ids } = req.body
     const idsChange = ids.split(', ')
@@ -90,7 +113,7 @@ module.exports.changeMulti = async (req, res) => {
     switch (type) {
         case 'active':
         case 'inactive':
-            await Product.updateMany({ _id: {$in: idsChange} }, { status: type})
+            await Product.updateMany({ _id: {$in: idsChange} }, { status: type, $push: { updatedBy: updatedBy } })
             req.flash('changeSuccess', `Đã thay đổi trang thái ${idsChange.length} sản phẩm thành công`)
             break 
         case 'delete-all':
@@ -106,7 +129,7 @@ module.exports.changeMulti = async (req, res) => {
         case 'change-position':
             for(const item of idsChange) {
                 const [ id, position ] = item.split('-')
-                await Product.updateOne({ _id: id }, { position: position })
+                await Product.updateOne({ _id: id }, { position: position, $push: { updatedBy: updatedBy } })
             }
             req.flash('changeSuccess', `Đã thay đổi vị trí của ${idsChange.length} sản phẩm thành công`)
             break
@@ -215,8 +238,19 @@ module.exports.editPatch = async (req, res) => {
     else {
         req.body.position = await Product.count() + 1
     }
+
+    const updatedBy = {
+        account_id: res.locals.user.id,
+        updatedAt: new Date()
+    }
     
-    await Product.findOneAndUpdate({ _id: req.params.id }, req.body)
+    await Product.findOneAndUpdate(
+        { _id: req.params.id }, 
+        {
+            ...req.body,
+            $push: { updatedBy: updatedBy }
+        }
+    )
 
     req.flash('changeSuccess', 'Đã cập nhật thông tin sản phẩm thành công!')
 

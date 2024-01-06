@@ -55,6 +55,7 @@ block main
                             th Giá
                             th Vị trí
                             th Người tạo
+                            th Người chỉnh sửa
                             th Trạng thái
                             th Hành động
                     tbody
@@ -76,7 +77,9 @@ block main
                                             width="100px"
                                             height="auto"
                                         ) 
-                                    td #{item.title} 
+                                    td(
+                                        style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;"
+                                    ) #{item.title} 
                                     td $#{item.price}
                                     td 
                                         input(
@@ -90,6 +93,10 @@ block main
                                         if (item.createdBy.accountName)
                                             p #{item.createdBy.accountName}
                                             +formatDateTime(item.createdBy.createdAt)
+                                    td  
+                                        if (item.updatedBy.length > 0)
+                                            p #{item.updatedBy[item.updatedBy.length - 1].accountName}
+                                            +formatDateTime(item.updatedBy[item.updatedBy.length - 1].updatedAt)
                                     td 
                                         if item.status == 'active'
                                             button(
