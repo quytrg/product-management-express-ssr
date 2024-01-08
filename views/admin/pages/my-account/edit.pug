@@ -1,0 +1,76 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+
+    +alert-success(3000)
+    +alert-error(3000)
+
+    h1(class="mb-4") Chỉnh sửa thông tin tài khoản
+
+    form(
+        action=`/${prefixAdmin}/my-account/edit?_method=PATCH`
+        method="POST"
+        enctype="multipart/form-data"
+    )
+        .mb-3
+            label(for="fullName" class="form-label") Họ và tên *
+            input(
+                type="text"
+                class="form-control"
+                id="fullName"
+                name="fullName"
+                required
+                value=user.fullName
+            )
+        .mb-3
+            label(for="email" class="form-label") Email *
+            input(
+                type="email"
+                class="form-control"
+                id="email"
+                name="email"
+                required
+                value=user.email
+            )
+        .mb-3
+            label(for="phone" class="form-label") Số điện thoại
+            input(
+                type="text"
+                class="form-control"
+                id="phone"
+                name="phone"
+                value=user.phone
+            )
+        div(
+            class="mb-3"
+            upload-image
+        )
+            label(for="avatar" class="form-label") Avatar
+            input(
+                type="file"
+                class="form-control"
+                id="avatar"
+                name="avatar"
+                accept="image/*"
+                input-image
+            )
+            img(
+                src=user.avatar
+                class="image-preview"
+                preview-image
+            )
+        .mb-3
+            label(for="password" class="form-label") Password *
+            input(
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+            )
+            p.text-danger * Xác nhận lại mật khẩu để cập nhật thông tin
+        .mb-3
+            button(
+                type="submit"
+                class="btn btn-primary me-1"
+            ) Cập nhật
