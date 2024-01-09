@@ -31,6 +31,31 @@ block main
                         option(value="") -- Chọn danh mục --
                         if(categoryTree)
                             +select-tree(categoryTree)
+            .mb-3.form-check.form-check-inline
+                input(
+                    type="radio"
+                    class="form-check-input"
+                    id="featured-1"
+                    name="featured"
+                    value="1"
+                    checked
+                ) 
+                label(
+                    for="featured-1"
+                    class="form-check-label"
+                ) Nổi bật
+            .mb-3.form-check.form-check-inline
+                input(
+                    type="radio"
+                    class="form-check-input"
+                    id="featured-0"
+                    name="featured"
+                    value="0"
+                )
+                label(
+                    for="featured-0"
+                    class="form-check-label"
+                ) Không
             .mb-3 
                 label(
                     for="desc"

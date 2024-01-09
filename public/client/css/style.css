@@ -54,6 +54,8 @@
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
+    aspect-ratio: 3/4;
+    position: relative;
 }
 
 .product-item .inner-image {
@@ -75,6 +77,8 @@
 .product-item .inner-content .inner-title {
     font-size: 20px;
     font-weight: 600;
+    overflow: hidden; 
+    text-overflow: ellipsis;
 }
 
 .product-item .inner-content .inner-price-new {
@@ -98,6 +102,22 @@
     display: inline-block;
     padding: 3px 10px;
     border-radius: 8px;
+}
+
+.absolute-bot {
+    position: absolute;
+    left: 1rem;
+    bottom: 1rem;
+}
+
+.inner-featured {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: rgb(255, 231, 19);
+    color: rgb(240, 10, 10);
+    padding: 5px;
+    border-radius: 5px;
 }
 
 /* End product-item */

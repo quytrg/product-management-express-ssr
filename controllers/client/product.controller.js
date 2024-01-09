@@ -1,4 +1,6 @@
 const Product = require('../../models/product.model.js')
+const ProductCategory = require('../../models/product-category.model.js')
+const productHelper = require('../../helpers/product.js')
 
 // [GET] /product
 module.exports.index = async (req, res) => {
@@ -10,15 +12,33 @@ module.exports.index = async (req, res) => {
     const products = await Product.find(filter)
                                 .sort({ position: 'desc' })
 
-    const newProduct = products.map(item => {
-        item.newPrice = (item.price * (100 -  item.discountPercentage) / 100).toFixed()
-        
-        return item
-    })
+    const newProducts = productHelper.newPriceOfProducts(products)
 
     res.render('client/pages/product/index.pug', {
         titlePage: 'Product',
-        products: newProduct
+        products: newProducts
+    })
+}
+
+// [GET] /product/:categorySlug
+module.exports.category = async (req, res) => {
+    // try catch
+    const categorySlug = req.params.categorySlug
+    const category = await ProductCategory.findOne({ slug: categorySlug })
+
+    const filter = {
+        category_id: category.id,
+        status: "active",
+        deleted: false
+    }
+    const products = await Product.find(filter)
+                                .sort({ position: 'desc' })
+
+    const newProducts = productHelper.newPriceOfProducts(products)
+
+    res.render('client/pages/product/index.pug', {
+        titlePage: 'Product',
+        products: newProducts
     })
 }
 
@@ -33,10 +53,8 @@ module.exports.details = async (req, res) => {
         }
         const product = await Product.findOne(filter)
     
-    
-        product.newPrice = (product.price * (100 -  product.discountPercentage) / 100).toFixed()
+        product.newPrice = productHelper.newPriceOfProduct(product)
             
-    
         res.render('client/pages/product/details.pug', {
             titlePage: 'Product',
             product
