@@ -1,15 +1,20 @@
-header.header
-  .container-fluid
-    .row.align-items-center
-      .col-3
-        .inner-logo
-          a(href="/")
-            img(src="/images/logo.png", alt="Logo")
+include ../mixins/sub-menu.pug
 
-      .col-9
-        .inner-menu
-          ul
-            li
-              a(href="/") Trang chủ
-            li
-              a(href="/product") Sản phẩm
+header.header
+    .container-fluid
+        .row.align-items-center
+            .col-3
+                .inner-logo
+                    a(href="/")
+                        img(src="/images/logo.jpg", alt="Logo")
+
+            .col-9
+                .inner-menu
+                    ul
+                        li
+                            a(href="/") Trang chủ
+                        li.sub-menu
+                            - const productPath = '/product'
+                            a(href=productPath) Sản phẩm
+                            if (categoryTree)
+                                +sub-menu(categoryTree, productPath)

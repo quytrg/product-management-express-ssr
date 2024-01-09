@@ -1,0 +1,8 @@
+mixin sub-menu(arr, path) 
+    ul
+        each item in arr 
+            li 
+                a(href=`${path}/${item.slug}`) #{item.title}
+                if (item.children && item.children.length > 0)
+                    +sub-menu(item.children, path)
+

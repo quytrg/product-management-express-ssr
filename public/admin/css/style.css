@@ -30,7 +30,7 @@ a {
 }
 
 .body .sider {
-  width: 150px;
+  width: 160px;
   background: white;
   color: #fff;
   height: calc(100vh - 56px);
@@ -42,7 +42,7 @@ a {
 .body .main {
   padding: 15px;
   position: relative;
-  left: 150px;
+  left: 170px;
   width: calc(100% - 180px);
 }
 /* End Body */
@@ -276,3 +276,44 @@ a {
 }
 /* End logout */
 
+/* Sub-menu */
+.sub-menu {
+    position: relative;
+    z-index: 999;
+}
+
+.sub-menu ul {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background: #eae9e9;
+    min-width: 180px;
+    display: none;
+}
+
+.sub-menu ul li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.sub-menu:hover>ul {
+    display: block;
+}
+
+.sub-menu ul li {
+    position: relative;
+}
+
+.sub-menu ul li ul {
+    right: 100%;
+    top: 0;
+}
+
+.sub-menu ul li:hover>ul {
+    display: block;
+}
+
+/* End sub-menu */
