@@ -9,4 +9,5 @@ block main
                 +box-head(sectionTitle)
 
         .row
-            +products-layout(products)
+            if (products)
+                +products-layout(products)
