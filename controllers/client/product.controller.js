@@ -15,7 +15,8 @@ module.exports.index = async (req, res) => {
     const newProducts = productHelper.newPriceOfProducts(products)
 
     res.render('client/pages/product/index.pug', {
-        titlePage: 'Product',
+        titlePage: 'Products',
+        sectionTitle: 'Danh sách sản phẩm',
         products: newProducts
     })
 }
@@ -26,8 +27,27 @@ module.exports.category = async (req, res) => {
     const categorySlug = req.params.categorySlug
     const category = await ProductCategory.findOne({ slug: categorySlug })
 
+    const getAllSubCategoryId = async (parent_id) => {
+        const subCategoryId = await ProductCategory.find({
+            parent_id: parent_id,
+            deleted: false,
+            status: 'active'
+        }).select('_id')
+
+        const allSub = subCategoryId.map(item => item.id)
+        
+        for (const sub of allSub) {
+            const childs = await getAllSubCategoryId(sub)
+            allSub.push(...childs)
+        }
+
+        return allSub
+    }
+
+    const allSubCategoryId = await getAllSubCategoryId(category.id)
+
     const filter = {
-        category_id: category.id,
+        category_id: { $in: [ category.id,  ...allSubCategoryId ] },
         status: "active",
         deleted: false
     }
@@ -37,14 +57,14 @@ module.exports.category = async (req, res) => {
     const newProducts = productHelper.newPriceOfProducts(products)
 
     res.render('client/pages/product/index.pug', {
-        titlePage: 'Product',
+        titlePage: 'Products',
+        sectionTitle: category.title,
         products: newProducts
     })
 }
 
 // [GET] /product/details/:slug
 module.exports.details = async (req, res) => {
-
     try {
         const filter = {
             slug: req.params.slug,
@@ -56,11 +76,12 @@ module.exports.details = async (req, res) => {
         product.newPrice = productHelper.newPriceOfProduct(product)
             
         res.render('client/pages/product/details.pug', {
-            titlePage: 'Product',
+            titlePage: 'Products',
             product
         })
             
     } catch (error) {
+        console.log(error)
         res.redirect('/product')
     }
 }
