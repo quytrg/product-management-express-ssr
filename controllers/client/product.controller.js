@@ -72,6 +72,11 @@ module.exports.details = async (req, res) => {
             deleted: false
         }
         const product = await Product.findOne(filter)
+
+        const category = await ProductCategory.findOne({
+            _id: product.category_id
+        })
+        product.category = category
     
         product.newPrice = productHelper.newPriceOfProduct(product)
             
