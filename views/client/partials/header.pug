@@ -35,3 +35,5 @@ header.header
                             a(href=productPath) Sản phẩm
                             if (categoryTree)
                                     +sub-menu(categoryTree, productPath)
+                        li 
+                            a(href="/cart") Giỏ hàng (#{totalQuantity ? totalQuantity : '0'})

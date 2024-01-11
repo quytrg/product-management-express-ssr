@@ -1,0 +1,59 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
+
+block main
+    +alert-success(5000)
+    +alert-error(5000)
+
+    .container.my-3
+        .row
+            .col-12
+                +box-head("Cart")
+
+        .row
+            .col-12
+                table(class="table table-bordered")
+                    thead
+                        tr(class="mid-pos")
+                            th STT
+                            th Hình ảnh
+                            th Tên 
+                            th Giá
+                            th Số lượng
+                            th Tổng tiền
+                            th Thao tác
+                    tbody
+                        if(cartDetails.products.length > 0)
+                            each item, index in cartDetails.products
+                                tr(class='mid-pos')
+                                    td(class='mid-pos') #{index + 1}
+                                    td(class='mid-pos')
+                                        img(src=item.productInfo.thumbnail, alt=item.productInfo.title width="80px")
+                                    td(class='mid-pos')
+                                        a(href=`/product/details/${item.productInfo.slug}` class="text-primary") #{item.productInfo.title}
+                                    td(class='mid-pos') #{item.productInfo.newPrice}$
+                                    td(class='mid-pos')
+                                        input(
+                                            type="number"
+                                            name="quantity"
+                                            value=item.quantity
+                                            min="1"
+                                            product-id=item.product_id
+                                            style="width: 55px; text-align: center; border: 1px solid #dee2e6"
+                                        )
+                                    td(class='mid-pos') #{item.totalPrice}$
+                                    td(class='mid-pos')
+                                        a(  
+                                            href=`/cart/delete/${item.product_id}`
+                                            class="btn btn-danger"
+                                        ) Delete
+                        else
+                            p Không có sản phẩm nào trong giỏ hàng
+
+                h3(class="text-end") Tổng thanh toán: #{cartDetails.totalCartPrice}$
+
+                div(class="text-end mt-3")
+                    a(href="/checkout" class="btn btn-success") Mua hàng
+
+    script(src="client/js/cart.js")

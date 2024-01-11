@@ -258,3 +258,9 @@
 }
 
 /* End show alert */
+
+/* mid-pos */
+.mid-pos {
+    vertical-align: middle;
+    text-align: center;
+}
