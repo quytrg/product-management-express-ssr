@@ -32,8 +32,7 @@ module.exports.index = async (req, res) => {
     catch (err) {
         console.log(err);
         res.redirect('back')
-    }
-    
+    } 
 }
 
 // [POST] /cart/add/:id 
@@ -80,5 +79,23 @@ module.exports.addPost = async (req, res) => {
         console.log(err);
         res.redirect('back')
     }
-    
+}
+
+// [GET] /cart/delete/:id
+module.exports.delete = async (req, res) => {
+    try {
+        const productId = req.params.id
+        const cartId = req.cookies.cartId
+        await Cart.findOneAndUpdate(
+            { _id: cartId },
+            { "$pull": { "products": { "product_id": productId } } },
+            { safe: true, multi: false }
+        )
+        req.flash('successMessage', 'Xoá sản phẩm thành công!')
+        res.redirect('back')
+    }
+    catch (err) {
+        console.log(err);
+        res.redirect('back')
+    } 
 }

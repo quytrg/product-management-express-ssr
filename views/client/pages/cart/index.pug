@@ -30,8 +30,8 @@ block main
                                     td(class='mid-pos') #{index + 1}
                                     td(class='mid-pos')
                                         img(src=item.productInfo.thumbnail, alt=item.productInfo.title width="80px")
-                                    td(class='mid-pos')
-                                        a(href=`/product/details/${item.productInfo.slug}` class="text-primary") #{item.productInfo.title}
+                                    td(class='text-start')
+                                        a(href=`/product/details/${item.productInfo.slug}` class="text-primary px-2") #{item.productInfo.title}
                                     td(class='mid-pos') #{item.productInfo.newPrice}$
                                     td(class='mid-pos')
                                         input(
