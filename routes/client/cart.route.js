@@ -7,6 +7,8 @@ router.post('/add/:id', cartController.addPost)
 
 router.get('/delete/:id', cartController.delete)
 
+router.get('/update-quantity/:id/:quantity', cartController.updateQuantity)
+
 router.get('/', cartController.index)
 
 
