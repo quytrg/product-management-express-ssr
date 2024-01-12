@@ -87,9 +87,9 @@ module.exports.orderPost = async (req, res) => {
             await order.save()
 
             // remove cart 
-            // await Cart.updateOne({ _id: cartId }, { products: [] })
+            await Cart.updateOne({ _id: cartId }, { products: [] })
 
-            res.redirect(`/checkout/order/${order.id}`)
+            res.redirect(`/checkout/success/${order.id}`)
         }
         else {
             res.redirect('back')
@@ -101,53 +101,36 @@ module.exports.orderPost = async (req, res) => {
     }
 }
 
-// [GET] /cart/delete/:id
-module.exports.delete = async (req, res) => {
+// [GET] /chechout/success/:id
+module.exports.success = async (req, res) => {
     try {
-        const productId = req.params.id
-        const cartId = req.cookies.cartId
-        await Cart.findOneAndUpdate(
-            { _id: cartId },
-            { "$pull": { "products": { "product_id": productId } } },
-            { safe: true, multi: false }
-        )
-        req.flash('successMessage', 'Xoá sản phẩm thành công!')
-        res.redirect('back')
+        const orderId = req.params.id
+
+        const order = await Order.findOne({ _id: orderId })
+
+        let totalPrice = 0
+
+        for (const product of order.products) {
+            const productInfo = await Product.findById(product.product_id)
+
+            product.productInfo = productInfo
+            product.newPrice = productHelper.newPriceOfProduct(product)
+            product.totalPrice = parseFloat(product.newPrice) * product.quantity
+
+            totalPrice += product.totalPrice
+        }
+
+        order.totalPrice = totalPrice
+
+        console.log(order);
+
+        res.render('client/pages/checkout/success.pug',{
+            titlePage: 'Order Successfully',
+            order
+        })
     }
     catch (err) {
         console.log(err);
         res.redirect('back')
     } 
-}
-
-// [GET] /cart/update-quantity/:id/:quantity
-module.exports.updateQuantity = async (req, res) => {
-    try {
-        const cartId = req.cookies.cartId
-        const productId = req.params.id
-        const quantity = parseInt(req.params.quantity)
-        
-        const cart = await Cart.findOne({
-            _id: cartId
-        })
-
-        if (quantity > 0) {
-            await Cart.updateOne(
-                {
-                    _id: cartId,
-                    "products.product_id": productId,
-                },
-                {
-                    "products.$.quantity": quantity,
-                }
-            );
-        }
-    
-        req.flash('successMessage', 'Chỉnh sửa số lượng sản phẩm thành công!')
-        res.redirect('back')
-    }
-    catch (err) {
-        console.log(err);
-        res.redirect('back')    
-    }
 }
