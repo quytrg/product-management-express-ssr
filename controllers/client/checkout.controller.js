@@ -111,7 +111,7 @@ module.exports.success = async (req, res) => {
         let totalPrice = 0
 
         for (const product of order.products) {
-            const productInfo = await Product.findById(product.product_id)
+            const productInfo = await Product.findById(product.product_id).select("title thumbnail")
 
             product.productInfo = productInfo
             product.newPrice = productHelper.newPriceOfProduct(product)
@@ -121,8 +121,6 @@ module.exports.success = async (req, res) => {
         }
 
         order.totalPrice = totalPrice
-
-        console.log(order);
 
         res.render('client/pages/checkout/success.pug',{
             titlePage: 'Order Successfully',
