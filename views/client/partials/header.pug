@@ -37,5 +37,12 @@ header.header
                                     +sub-menu(categoryTree, productPath)
                         li 
                             a(href="/cart") Giỏ hàng (#{totalQuantity ? totalQuantity : '0'})
-                        li 
-                            a(href="/user/register") Đăng ký 
+                        if (user) 
+                            li 
+                                a(href="/user/logout") Đăng xuất 
+                        else        
+                            div #{user} 
+                            li 
+                                a(href="/user/register") Đăng ký 
+                            li 
+                                a(href="/user/login") Đăng nhập
