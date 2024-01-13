@@ -21,9 +21,10 @@ block main
                             class='form-control'
                             id='email'
                             name='email'
+                            value=email
                             required
                         )
-                    div(class='mb-3')
+                    div(class='mb-1')
                         label(for='password') Password
                         input(
                             type='password'
@@ -32,7 +33,9 @@ block main
                             name='password'
                             required
                         )
-                    div(class='mb-3')
+                    .text-end    
+                        a(href="/user/password/forgot" class="text-end text-primary") Quên mật khẩu?
+                    div(class='mt-3')
                         button(
                             type='submit'
                             class='btn btn-primary btn-block'

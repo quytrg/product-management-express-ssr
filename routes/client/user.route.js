@@ -16,4 +16,16 @@ router.post('/login', userValidate.loginPost, userController.loginPost)
 
 router.get('/logout', userController.logout)
 
+router.get('/password/forgot', userController.forgotPassword)
+
+router.post('/password/forgot', userValidate.forgotPasswordPost, userController.forgotPasswordPost)
+
+router.get('/password/otp', userController.otp)
+
+router.post('/password/otp', userValidate.otpPost, userController.otpPost)
+
+router.get('/password/reset', userController.resetPassword)
+
+router.post('/password/reset', userValidate.resetPasswordPost, userController.resetPasswordPost)
+
 module.exports = router
