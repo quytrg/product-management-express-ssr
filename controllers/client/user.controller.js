@@ -234,3 +234,16 @@ module.exports.resetPasswordPost = async (req, res) => {
         res.redirect('back')
     }
 }
+
+// [GET] /user/info
+module.exports.info = async (req, res) => {
+    try {
+        res.render('client/pages/user/info.pug',{
+            titlePage: 'User Information',
+        })
+    }   
+    catch(err) {
+        console.log(err)
+        res.redirect('back')
+    }
+}

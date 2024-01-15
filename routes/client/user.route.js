@@ -6,6 +6,9 @@ const userController = require('../../controllers/client/user.controller.js')
 // validates
 const userValidate = require('../../validates/client/user.validate.js')
 
+// middlewares
+const authMiddleware = require('../../middlewares/client/auth.middleware.js')
+
 router.get('/register', userController.register)
 
 router.post('/register', userValidate.registerPost ,userController.registerPost)
@@ -27,5 +30,7 @@ router.post('/password/otp', userValidate.otpPost, userController.otpPost)
 router.get('/password/reset', userController.resetPassword)
 
 router.post('/password/reset', userValidate.resetPasswordPost, userController.resetPasswordPost)
+
+router.get('/info', authMiddleware.requireAuth, userController.info)
 
 module.exports = router
