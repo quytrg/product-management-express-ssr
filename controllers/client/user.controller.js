@@ -1,4 +1,5 @@
 const User = require('../../models/user.model')
+const Cart = require('../../models/cart.model')
 const ForgotPassword = require('../../models/forgot-password.model')
 
 // bcrypt hash password
@@ -88,6 +89,12 @@ module.exports.loginPost = async (req, res) => {
             res.redirect('back')
             return
         }
+
+        // save user_id to current cart
+        await Cart.updateOne(
+            { _id: req.cookies.cartId },
+            { user_id: user.id }
+        )
 
         res.cookie('token', user.token, { expires: new Date(Date.now() + 86400000*3), httpOnly: true })
         res.redirect('/')
