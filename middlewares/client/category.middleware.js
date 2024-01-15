@@ -14,7 +14,7 @@ module.exports.category = async (req, res, next) => {
 
         next()
     }
-    catch (err) {
+    catch (error) {
         console.log("ERROR OCCURED:", error);
     }
 }
