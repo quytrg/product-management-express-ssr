@@ -7,7 +7,7 @@ header.header
                 .inner-logo.ms-1
                     a(href="/")
                         img(src=generalSettings.logo, alt="Logo" width='68px')
-            .col-5
+            .col-4
                 form(
                     action="/search"
                     method="GET"
@@ -25,7 +25,7 @@ header.header
                             class="btn btn-primary"
                         ) Search
 
-            .col-4
+            .col-5
                 .inner-menu
                     ul
                         li
@@ -40,6 +40,8 @@ header.header
                         if (user) 
                             li 
                                 a(href="/user/info") #{user.fullName}
+                            li 
+                                a(href="/chat") Chat
                             li 
                                 a(href="/user/logout") Đăng xuất 
                         else        

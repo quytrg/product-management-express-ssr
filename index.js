@@ -9,13 +9,19 @@ const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const path = require('path')
 const moment = require('moment')
+const { createServer } = require('node:http')
+const { Server } = require('socket.io');
 
 const routeClient = require('./routes/client/index.route.js')
 const routeAdmin = require('./routes/admin/index.route.js')
 
 const app = express()
+const server = createServer(app)
 database.connect()
 const port = process.env.PORT
+
+// socket.io
+global.io = new Server(server)
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -53,6 +59,6 @@ app.get("*", (req, res) => {
     });
 });
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`App listening on port ${port}`)
 })
