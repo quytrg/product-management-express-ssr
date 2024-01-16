@@ -9,36 +9,30 @@ block main
 
         .row
             .col-12
-                .chat 
+                .chat(my-id=user.id) 
                     .inner-body 
-                        .inner-incoming 
-                            .inner-name Alex 
-                            .inner-content 
-                                | The meeting will be organise in Hall.
-                        .inner-outgoing
-                            .inner-content 
-                                | I will be there soon
-                        .inner-incoming 
-                            .inner-name Alex 
-                            .inner-content
-                                | Be fast !
-                        .inner-outgoing
-                            .inner-content 
-                                | I already come but why the door is locked 
-                        .inner-incoming 
-                            .inner-name Alex 
-                            .inner-content Oh i forgot, the meeting scheledule changed :))
+                        each chat in chats
+                            if (chat.user_id === user.id)
+                                .inner-outgoing
+                                    .inner-content 
+                                        | #{chat.content}
+                            else 
+                                .inner-incoming
+                                    .inner-name #{chat.userInfo.fullName} 
+                                    .inner-content 
+                                        | #{chat.content}
                     .inner-foot 
                         form(
                             class='inner-form'
                             action=''
+                            form-send-chat
                         )
                             input(
                                 type='text'
                                 placeholder='Type chat content...'
                                 name='content'
+                                autocomplete='off'
                             )
                             button.ms-1 
                                 i(style='font-size: 26px;').fa-solid.fa-paper-plane
-    script(src="/socket.io/socket.io.js") 
-    script(src="/client/js/chat.js") 
+

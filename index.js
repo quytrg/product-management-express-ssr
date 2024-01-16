@@ -21,7 +21,8 @@ database.connect()
 const port = process.env.PORT
 
 // socket.io
-global.io = new Server(server)
+const io = new Server(server)
+global.io = io
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))

@@ -284,6 +284,10 @@
     flex-direction: column;
 }
 
+.chat .inner-incoming {
+    margin-bottom: 0.25rem;
+}
+
 .chat .inner-incoming .inner-content {
     background: #ddd;
     padding: .5rem 1rem;
@@ -296,6 +300,7 @@
 .chat .inner-outgoing {
     display: flex;
     justify-content: flex-end;
+    margin-bottom: 0.25rem;
 }
 
 .chat .inner-outgoing .inner-content {
