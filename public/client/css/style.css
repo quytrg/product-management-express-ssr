@@ -356,3 +356,30 @@
 .chat .inner-form button:hover {
     background: #ddd;
 }
+
+.chat .inner-form .toggle-emoji {
+    border-radius: 50%;
+    border: none;
+    background: #fff;
+    color: rgb(4, 107, 138);
+    padding: 0.75rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chat .inner-form .toggle-emoji:hover {
+    background: #ddd;
+}
+
+/* emoji-picker-element */
+.tooltip {
+    visibility: hidden;
+}
+
+.tooltip.shown {
+    visibility: visible;
+    opacity: 1;
+}
+/*End emoji-picker-element */

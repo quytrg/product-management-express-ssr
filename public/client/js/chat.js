@@ -1,3 +1,5 @@
+import * as Popper from 'https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js'
+
 // CLIENT_SEND_MESSAGE
 const formSendChat = document.querySelector('form[form-send-chat]')
 if (formSendChat) {
@@ -49,3 +51,36 @@ if (chatBody) {
     chatBody.scrollTop = chatBody.scrollHeight
 }
 // End scroll chat to bottom
+
+// emoji-picker-element
+const chatBox = document.querySelector('.chat') 
+if (chatBox) {
+    // toggle emoji button
+    const button = chatBox.querySelector('.toggle-emoji')
+    const tooltip = chatBox.querySelector('.tooltip')
+    Popper.createPopper(button, tooltip)
+
+    const toggleEmoji = chatBox.querySelector('.toggle-emoji')
+    toggleEmoji.onclick = () => {
+        tooltip.classList.toggle('shown')
+    }
+    document.addEventListener('click', (e) => {
+        let isClickInsideElement = toggleEmoji.contains(e.target);
+
+        // click outside toggle emoji button
+        if (!isClickInsideElement) {
+            tooltip.classList.remove('shown')
+        }
+    })
+
+    // insert emoji to chat content
+    const chatContent = chatBox.querySelector('input[name="content"]')
+    chatBox.querySelector('emoji-picker')
+        .addEventListener('emoji-click', (e) => {
+            chatContent.value += e.detail.unicode
+        });
+}
+
+
+
+// End emoji-picker-element
