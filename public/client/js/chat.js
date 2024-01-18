@@ -38,6 +38,14 @@ socket.on('SERVER_SEND_MESSAGE', (messageInfo) => {
         }
         chatDiv.innerHTML = chatContent
         chatBody.appendChild(chatDiv)
+        chatBody.scrollTop = chatBody.scrollHeight
     }
 })
 // End SERVER_SEND_MESSAGE
+
+// Scroll chat to bottom
+const chatBody = document.querySelector('.chat .inner-body')
+if (chatBody) {
+    chatBody.scrollTop = chatBody.scrollHeight
+}
+// End scroll chat to bottom

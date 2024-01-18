@@ -8,6 +8,13 @@ const bcrypt = require('bcrypt');
 // [GET] /admin/auth/login
 module.exports.login = async (req, res) => {
     try {
+        if (req.cookies.token) {
+            const result = await Account.findOne({ token: req.cookies.token })
+            if (result) {
+                res.redirect(`/${systemConfig.prefixAdmin}/dashboard`)
+                return
+            }
+        }
         res.render(`${systemConfig.prefixAdmin}/pages/auth/login.pug`, {
             titlePage: "Login",
         });
