@@ -301,8 +301,10 @@
 
 .chat .inner-outgoing {
     display: flex;
+    flex-direction: column;
     justify-content: flex-end;
     margin-bottom: 0.25rem;
+    margin-right: 0.25rem;
 }
 
 .chat .inner-outgoing .inner-content {
@@ -312,6 +314,7 @@
     border-radius: 15px;
     width: fit-content;
     max-width: 16rem;
+    margin-left: auto;
 }
 
 .chat .inner-form {
@@ -329,7 +332,7 @@
 }
 
 .chat .inner-foot {
-    margin-top: 3rem;
+    margin-top: 1rem;
     position: relative;
 }
 
@@ -357,7 +360,7 @@
     background: #ddd;
 }
 
-.chat .inner-form .toggle-emoji {
+.chat .inner-form .toggle-button {
     border-radius: 50%;
     border: none;
     background: #fff;
@@ -369,9 +372,88 @@
     align-items: center;
 }
 
-.chat .inner-form .toggle-emoji:hover {
+.chat .inner-form .toggle-button:hover {
     background: #ddd;
 }
+
+/* .chat .inner-form .button-icon,
+.chat .inner-form .button-icon-img {
+    color: #6f6f6f;
+    border-radius: 15px;
+    height: 32px;
+    padding: 0 10px;
+    width: 4%;
+    padding: 1.25rem 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    transition: all .2s;
+} */
+
+/* .chat .inner-form .button-icon:hover,
+.chat .inner-form .button-icon-img:hover {
+    background-color: #efefef;
+} */
+
+/* .chat .inner-form button {
+    margin-left: .25rem;
+    border-radius: 15px;
+    border: 1px solid rgb(4, 107, 138);
+    background: rgb(4, 107, 138);
+    color: #fff;
+    height: 32px;
+    padding: 0 10px;
+    width: 7%;
+    padding: 1.25rem 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} */
+
+.chat .inner-body .inner-images img {
+    width: 80px;
+    height: auto;
+    object-fit: cover;
+    margin: 5px 5px 5px 0;
+    border-radius: 5px;
+}
+
+.chat .inner-body .inner-outgoing .inner-images {
+    margin-top: 5px;
+    margin-left: auto;
+    text-align: right;
+}
+
+.chat .inner-body .inner-outgoing .inner-images img {
+    margin: 0 0 5px 5px;
+}
+
+.chat .inner-preview-images {
+    position: relative;
+}
+
+.chat .inner-preview-images .label-container {
+    display: none;
+}
+
+.chat .inner-preview-images .input-container {
+    display: none;
+}
+
+.chat .inner-preview-images .image-preview {
+    height: auto;
+    padding: 0;
+    border-radius: 0;
+}
+
+.chat .inner-preview-images .image-preview-item {
+    width: 90px;
+    background-size: contain;
+}
+/* End chat */
 
 /* emoji-picker-element */
 .tooltip {

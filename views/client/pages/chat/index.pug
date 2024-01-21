@@ -14,15 +14,30 @@ block main
                         each chat in chats
                             if (chat.user_id === user.id)
                                 .inner-outgoing
-                                    .inner-content 
-                                        | #{chat.content}
+                                    if (chat.content)
+                                        .inner-content 
+                                            | #{chat.content}
+                                    if (chat.images)
+                                        .inner-images 
+                                            each image in chat.images 
+                                                img(src=image)
+
                             else 
                                 .inner-incoming
                                     .inner-name #{chat.userInfo.fullName} 
-                                    .inner-content 
-                                        | #{chat.content}
+                                    if (chat.content)
+                                        .inner-content 
+                                            | #{chat.content}
+                                    if (chat.images)
+                                        .inner-images 
+                                            each image in chat.images 
+                                                img(src=image)
                         div(class='inner-list-typing')
-        
+                    .inner-preview-images
+                        div(
+                            class="custom-file-container" 
+                            data-upload-id="image-preview"
+                        )
                     .inner-foot 
                         form(
                             class='inner-form'
@@ -35,9 +50,11 @@ block main
                                 name='content'
                                 autocomplete='off'
                             )
-                            span.ms-3.toggle-emoji
+                            span.ms-3.toggle-button.toggle-emoji
                                 i(style='font-size: 26px;').fa-solid.fa-face-smile
                             div(class="tooltip" role="tooltip")
                                 emoji-picker
+                            label(class="toggle-button" for="file-upload-with-preview-image-preview")
+                                i(style='font-size: 26px;').fa-solid.fa-image
                             button
                                 i(style='font-size: 26px;').fa-solid.fa-paper-plane

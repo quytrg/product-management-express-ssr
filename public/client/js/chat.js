@@ -3,12 +3,25 @@ import * as Popper from 'https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm
 // CLIENT_SEND_MESSAGE
 const formSendChat = document.querySelector('form[form-send-chat]')
 if (formSendChat) {
+    // file-upload-with-preview
+    const upload = new FileUploadWithPreview.FileUploadWithPreview('image-preview', {
+        multiple: true,
+        maxFileCount: 6,
+    });
     formSendChat.addEventListener('submit', (e) => {
         e.preventDefault()
-        const content = e.target.elements.content.value
-        if (content) {
-            socket.emit('CLIENT_SEND_MESSAGE', content)
+
+        const content = e.target.elements.content.value || ''
+
+        const images = upload.cachedFileArray || []
+        if (content.trim() !== '' || images.length > 0) {
+            const data = {
+                content,
+                images
+            }
+            socket.emit('CLIENT_SEND_MESSAGE', data)
             e.target.elements.content.value = ''
+            upload.resetPreviewPanel();
         }
     })
 }
@@ -20,28 +33,46 @@ socket.on('SERVER_SEND_MESSAGE', (messageInfo) => {
     if (chatBox) {
         const myId = chatBox.getAttribute('my-id')
         const chatBody = chatBox.querySelector('.inner-body')
-
         const chatDiv = document.createElement('div')
+
         let chatContent = ''
+        if (messageInfo.content !== '') {
+            chatContent += `<div class="inner-content">${messageInfo.content}</div>`
+        }
+
+        if (messageInfo.images.length > 0) {
+            chatContent += `<div class="inner-images">`
+            for(const imageUrl of messageInfo.images) {
+                chatContent += `<img src="${imageUrl}">`
+            }
+            chatContent += `</div>`
+        }
+        
+        let chatInner = ``
         if (myId === messageInfo.user_id) {
-            chatContent = `
+            chatInner = `
                 <div class="inner-outgoing">
-                    <div class="inner-content">${messageInfo.content}</div>
+                ${chatContent}
                 </div>
             `
         }
         else {
-            chatContent = `
+            chatInner = `
                 <div class="inner-incoming">
                     <div class="inner-name">${messageInfo.fullName}</div>
-                    <div class="inner-content">${messageInfo.content}</div>
+                    ${chatContent}
                 </div>
             `
         }
-        chatDiv.innerHTML = chatContent
+
+
+        chatDiv.innerHTML = chatInner
         const typingList = chatBody.querySelector('.inner-list-typing')
         chatBody.insertBefore(chatDiv, typingList)
-
+        
+        // Preview full screen image with viewerjs
+        const gallery = new Viewer(chatDiv);
+        
         chatBody.scrollTop = chatBody.scrollHeight
     }
 })
@@ -138,4 +169,11 @@ socket.on('SERVER_SEND_TYPING', (typingInfo) => {
 })
 // End SERVER_SEND_TYPING
 
+// Preview full screen image with viewerjs
 
+// View a list of images.
+// Note: All images within the container will be found by calling `element.querySelectorAll('img')`.
+const gallery = new Viewer(document.querySelector('.chat .inner-body'));
+// Then, show one image by click it, or call `gallery.show()`.
+
+// End Preview full screen image with viewerjs
