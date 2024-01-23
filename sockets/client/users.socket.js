@@ -3,6 +3,7 @@ const User = require('../../models/user.model')
 module.exports = async (res) => {
     const userId = res.locals.user.id
     io.once('connection', (socket) => {
+        // add friend
         socket.on('CLIENT_ADD_FRIEND', async (recipientId) => {
             
             // add recipient id to sender's requestFriends
@@ -22,6 +23,15 @@ module.exports = async (res) => {
             if (!isExistInAcceptList) {
                 await User.updateOne({ _id: recipientId }, { $push: { acceptFriends: userId } })
             }
+        })
+
+        // cancel friend request
+        socket.on('CLIENT_CANCEL_FRIEND_REQUEST', async (recipientId) => {
+            // remove recipient id from sender's requestFriends
+            await User.updateOne({ _id: userId }, { $pull: { requestFriends: recipientId } })
+
+            // remove user id from recipient's acceptFriends
+            await User.updateOne({ _id: recipientId }, { $pull: { acceptFriends: userId } })
         })
     });
 } 
