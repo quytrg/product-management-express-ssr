@@ -1,5 +1,7 @@
 const User = require('../../models/user.model')
 
+const generateHelper = require('../../helpers/generate')
+
 module.exports = async (res) => {
     const userId = res.locals.user.id
     io.once('connection', (socket) => {
@@ -33,5 +35,43 @@ module.exports = async (res) => {
             // remove user id from recipient's acceptFriends
             await User.updateOne({ _id: recipientId }, { $pull: { acceptFriends: userId } })
         })
+
+        // confirm friend request
+        socket.on('CLIENT_CONFIRM_REQUEST', async (requestSenderId) => {
+            // generate a room chat id
+            const roomChatId = generateHelper.generateRandomString(20)
+
+            // add request sender id to user's friend list
+            const isExistInFriendListOfUser = await User.findOne({
+                _id: userId,
+                'friendList.user_id': requestSenderId
+            })
+
+            if (!isExistInFriendListOfUser) {
+                await User.updateOne({ _id: userId }, { $push: { friendList: {
+                    user_id: requestSenderId,
+                    room_chat_id: roomChatId
+                } } })
+            }
+
+            // add user id to request sender's friend list
+            const isExistInFriendListOfSender = await User.findOne({
+                _id: requestSenderId,
+                'friendList.user_id': userId
+            })
+            if (!isExistInFriendListOfSender) {
+                await User.updateOne({ _id: requestSenderId }, { $push: { friendList: {
+                    user_id: userId,
+                    room_chat_id: roomChatId
+                } } })
+            }
+
+            // remove request sender id from user's acceptFriends
+            await User.updateOne({ _id: userId }, { $pull: { acceptFriends: requestSenderId } })
+
+            // remove user id from request sender's requestFriends
+            await User.updateOne({ _id: requestSenderId }, { $pull: { requestFriends: userId } })
+        })
+
     });
 } 

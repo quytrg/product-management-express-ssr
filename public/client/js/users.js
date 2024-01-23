@@ -26,4 +26,18 @@ if (CancelFriendsButtonList) {
 }
 // End friend request cencellation feature
 
+// Confirm friend request
+const friendConfirmationButtonList = document.querySelectorAll('button[btn-confirm-request]')
+if (friendConfirmationButtonList) {
+    friendConfirmationButtonList.forEach(button => {
+        button.addEventListener('click', () => {
+            const requestSenderId = button.getAttribute('btn-confirm-request')
+            // const userBox = button.closest('.box-user')
+            // userBox.classList.remove('add')
+            socket.emit('CLIENT_CONFIRM_REQUEST', requestSenderId)
+        })
+    })
+}
+// End confirm friend request
+
 

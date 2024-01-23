@@ -80,3 +80,29 @@ module.exports.accept = async (req, res) => {
         res.redirect('back')
     }
 }
+
+// [GET] /users/friends
+module.exports.friends = async (req, res) => {
+    try {
+        await usersSocket(res)
+
+        const user = await User.findOne({ _id: res.locals.user.id }).select('friendList')
+        const { friendList } = user
+
+        const friendIdList = friendList.map(item => item.user_id)
+
+        const users = await User.find({
+            _id: { $in: friendIdList },
+            status: 'active',
+            deleted: false
+        }).select('avatar fullName')
+        res.render('client/pages/users/friends.pug',{
+            titlePage: 'Friend List',
+            users
+        })
+    }   
+    catch(err) {
+        console.log(err)
+        res.redirect('back')
+    }
+}

@@ -9,4 +9,6 @@ router.get('/request', usersController.request)
 
 router.get('/accept', usersController.accept)
 
+router.get('/friends', usersController.friends)
+
 module.exports = router
