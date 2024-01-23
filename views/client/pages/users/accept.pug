@@ -26,8 +26,16 @@ block main
                                     btn-confirm-request=user.id
                                 ) Chấp nhận
                                 button(
+                                    class='btn btn-sm btn-primary me-1'
+                                    btn-accepted-request
+                                ) Bạn bè
+                                button(
                                     class='btn btn-sm btn-secondary me-1'
                                     btn-refuse-request=user.id
                                 ) Từ chối
+                                button(
+                                    class='btn btn-sm btn-secondary me-1'
+                                    btn-refused-request
+                                ) Đã từ chối
 block script 
     script(src="/client/js/users.js") 

@@ -32,12 +32,26 @@ if (friendConfirmationButtonList) {
     friendConfirmationButtonList.forEach(button => {
         button.addEventListener('click', () => {
             const requestSenderId = button.getAttribute('btn-confirm-request')
-            // const userBox = button.closest('.box-user')
-            // userBox.classList.remove('add')
+            const userBox = button.closest('.box-user')
+            userBox.classList.add('accepted')
             socket.emit('CLIENT_CONFIRM_REQUEST', requestSenderId)
         })
     })
 }
 // End confirm friend request
+
+// Refuse friend request
+const friendRefusalButtonList = document.querySelectorAll('button[btn-refuse-request]')
+if (friendRefusalButtonList) {
+    friendRefusalButtonList.forEach(button => {
+        button.addEventListener('click', () => {
+            const requestSenderId = button.getAttribute('btn-refuse-request')
+            const userBox = button.closest('.box-user')
+            userBox.classList.add('refuse')
+            socket.emit('CLIENT_REFUSE_REQUEST', requestSenderId)
+        })
+    })
+}
+// End refuse friend request
 
 

@@ -564,35 +564,35 @@
     display: inline-block;
 }
 
-.box-user [btn-deleted-friend] {
+.box-user [btn-refused-request] {
     display: none;
 }
 
-.box-user.refuse [btn-accept-friend] {
+.box-user.refuse [btn-confirm-request] {
     display: none;
 }
 
-.box-user.refuse [btn-refuse-friend] {
+.box-user.refuse [btn-refuse-request] {
     display: none;
 }
 
-.box-user.refuse [btn-deleted-friend] {
+.box-user.refuse [btn-refused-request] {
     display: inline-block;
 }
 
-.box-user [btn-accepted-friend] {
+.box-user [btn-accepted-request] {
     display: none;
 }
 
-.box-user.accepted [btn-accept-friend] {
+.box-user.accepted [btn-confirm-request] {
     display: none;
 }
 
-.box-user.accepted [btn-refuse-friend] {
+.box-user.accepted [btn-refuse-request] {
     display: none;
 }
 
-.box-user.accepted [btn-accepted-friend] {
+.box-user.accepted [btn-accepted-request] {
     display: inline-block;
 }
 

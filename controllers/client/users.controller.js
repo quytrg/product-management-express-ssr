@@ -7,14 +7,15 @@ const usersSocket = require('../../sockets/client/users.socket')
 module.exports.notFriend = async (req, res) => {
     try {
         await usersSocket(res)
-        const user = await User.findOne({ _id: res.locals.user.id }).select('requestFriends acceptFriends')
-        const { requestFriends, acceptFriends } = user
-
+        const user = await User.findOne({ _id: res.locals.user.id }).select('requestFriends acceptFriends friendList')
+        const { requestFriends, acceptFriends, friendList } = user
+        const friendIdList = friendList.map(item => item.user_id)
         const users = await User.find({
             $and: [
                 { _id: { $ne: res.locals.user.id }, },
                 { _id: { $nin: requestFriends }},
                 { _id: { $nin: acceptFriends }},
+                { _id: { $nin: friendIdList }},
             ],
             status: 'active',
             deleted: false
