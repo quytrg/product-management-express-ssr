@@ -170,10 +170,10 @@ socket.on('SERVER_SEND_TYPING', (typingInfo) => {
 // End SERVER_SEND_TYPING
 
 // Preview full screen image with viewerjs
-
-// View a list of images.
-// Note: All images within the container will be found by calling `element.querySelectorAll('img')`.
-const gallery = new Viewer(document.querySelector('.chat .inner-body'));
-// Then, show one image by click it, or call `gallery.show()`.
-
+if (chatBody) {
+    // View a list of images.
+    // Note: All images within the container will be found by calling `element.querySelectorAll('img')`.
+    const gallery = new Viewer(document.querySelector('.chat .inner-body'));
+    // Then, show one image by click it, or call `gallery.show()`.
+}
 // End Preview full screen image with viewerjs

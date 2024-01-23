@@ -6,6 +6,9 @@ const systemConfig = require("../../config/system");
 // bcrypt hash password
 const bcrypt = require('bcrypt');
 
+// helpers
+const generateHelper = require('../../helpers/generate')
+
 // [GET] /admin/accounts
 module.exports.index = async (req, res) => {
     try {
@@ -55,6 +58,7 @@ module.exports.createPost = async (req, res) => {
         const saltRounds = 10;
         const plainTextPassword = req.body.password;
         req.body.password = await bcrypt.hash(plainTextPassword, saltRounds);
+        req.body.token = generateHelper.generateRandomString(30)
 
         const doc = await Account.create(req.body)
         await doc.save()

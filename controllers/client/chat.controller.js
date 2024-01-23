@@ -16,10 +16,11 @@ module.exports.index = async (req, res) => {
         for (const chat of chats) {
             const userInfo = await User.findOne({
                 _id: chat.user_id
-            }).select("fullName")
+            })
 
             chat.userInfo = userInfo
         }
+
         
         res.render('client/pages/chat/index.pug',{
             titlePage: 'Chat',

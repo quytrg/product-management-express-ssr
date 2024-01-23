@@ -6,7 +6,9 @@ block main
         .row 
             .col-12
                 +box-head('Chat')
-
+        .row 
+            .col-12.mb-3
+                include ../../partials/friends-features-navbar.pug
         .row
             .col-12
                 .chat(my-id=user.id) 
@@ -58,3 +60,5 @@ block main
                                 i(style='font-size: 26px;').fa-solid.fa-image
                             button
                                 i(style='font-size: 26px;').fa-solid.fa-paper-plane
+block script
+    script(type="module" src="/client/js/chat.js")

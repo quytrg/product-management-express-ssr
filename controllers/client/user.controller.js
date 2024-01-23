@@ -36,7 +36,7 @@ module.exports.registerPost = async (req, res) => {
         const saltRounds = 10;
         const plainTextPassword = req.body.password;
         req.body.password = await bcrypt.hash(plainTextPassword, saltRounds);
-
+        req.body.token = generateHelper.generateRandomString(30)
         const user = new User(req.body)
         await user.save()
 
