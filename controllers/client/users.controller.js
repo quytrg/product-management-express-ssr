@@ -55,3 +55,28 @@ module.exports.request = async (req, res) => {
         res.redirect('back')
     }
 }
+
+// [GET] /users/accept
+module.exports.accept = async (req, res) => {
+    try {
+        await usersSocket(res)
+
+        const user = await User.findOne({ _id: res.locals.user.id }).select('acceptFriends')
+        const { acceptFriends } = user
+
+        const users = await User.find({
+            _id: { $in: acceptFriends },
+            status: 'active',
+            deleted: false
+        }).select('avatar fullName')
+
+        res.render('client/pages/users/accept.pug',{
+            titlePage: 'Friend Request',
+            users
+        })
+    }   
+    catch(err) {
+        console.log(err)
+        res.redirect('back')
+    }
+}
