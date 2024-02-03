@@ -63,6 +63,12 @@ module.exports = async (res) => {
                 recipientId,
                 numRequest
             })
+
+            // emit an event to remove sender info from recipient's 'accept list' 
+            socket.broadcast.emit('SERVER_CANCEL_FRIEND_REQUEST', {
+                recipientId,
+                senderId: userId
+            })
         })
 
         // confirm friend request

@@ -134,4 +134,16 @@ if (acceptFriends) {
 }
 // End render friend request list realtime
 
-
+// Remove sender info from recipient's 'accept list' 
+if (acceptFriends) {
+    socket.on('SERVER_CANCEL_FRIEND_REQUEST', async ({ recipientId, senderId }) => {
+        const userId = acceptFriends.getAttribute('accept-friends')
+        if (userId === recipientId) {
+            const senderBox = acceptFriends.querySelector(`[user-id="${senderId}"]`)
+            if (senderBox) {
+                acceptFriends.removeChild(senderBox)
+            }
+        }
+    })
+}
+// End remove sender info from recipient's 'accept list' 
