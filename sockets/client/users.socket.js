@@ -26,6 +26,34 @@ module.exports = async (res) => {
                 await User.updateOne({ _id: recipientId }, { $push: { acceptFriends: userId } })
             }
 
+            // emit friend request notification to recipient
+            const recepientInfo = await User.findOne({
+                _id: recipientId
+            })
+            const numRequest = recepientInfo.acceptFriends.length
+            socket.broadcast.emit('SERVER_SEND_FRIEND_REQUEST_NOTIFICATION', {
+                recipientId,
+                numRequest
+            })
+
+            //emit sender's info to recepient's acceptFriends
+            const senderInfo = await User.findOne({
+                _id: userId
+            }).select('avatar fullName')
+            socket.broadcast.emit('SERVER_SEND_SENDER_INFO', {
+                recipientId,
+                senderInfo
+            })
+        })
+
+        // cancel friend request
+        socket.on('CLIENT_CANCEL_FRIEND_REQUEST', async (recipientId) => {
+            // remove recipient id from sender's requestFriends
+            await User.updateOne({ _id: userId }, { $pull: { requestFriends: recipientId } })
+
+            // remove user id from recipient's acceptFriends
+            await User.updateOne({ _id: recipientId }, { $pull: { acceptFriends: userId } })
+
             // emit friend request notification to recepient
             const recepientInfo = await User.findOne({
                 _id: recipientId
@@ -37,17 +65,15 @@ module.exports = async (res) => {
             })
         })
 
-        // cancel friend request
-        socket.on('CLIENT_CANCEL_FRIEND_REQUEST', async (recipientId) => {
-            // remove recipient id from sender's requestFriends
-            await User.updateOne({ _id: userId }, { $pull: { requestFriends: recipientId } })
-
-            // remove user id from recipient's acceptFriends
-            await User.updateOne({ _id: recipientId }, { $pull: { acceptFriends: userId } })
-        })
-
         // confirm friend request
         socket.on('CLIENT_CONFIRM_REQUEST', async (requestSenderId) => {
+            // check if requestSenderId is in user's acceptFriends
+            const isExistInAcceptFriends = await User.findOne({
+                _id: userId,
+                acceptFriends: requestSenderId
+            })
+            if (!isExistInAcceptFriends) return
+
             // generate a room chat id
             const roomChatId = generateHelper.generateRandomString(20)
 

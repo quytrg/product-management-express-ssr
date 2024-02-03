@@ -70,7 +70,6 @@ if (unfriendButtonList) {
 
 // Friend request notification
 const friendRequestNoti = document.querySelector('span[badge-users-accept]')
-console.log(friendRequestNoti);
 if (friendRequestNoti) {
     socket.on('SERVER_SEND_FRIEND_REQUEST_NOTIFICATION', async ({ recipientId, numRequest }) => {
         const userId = friendRequestNoti.getAttribute('badge-users-accept')
@@ -80,5 +79,59 @@ if (friendRequestNoti) {
     })
 }
 // End friend request notification
+
+// Render friend request list realtime
+const acceptFriends = document.querySelector('div[accept-friends]')
+if (acceptFriends) {
+    socket.on('SERVER_SEND_SENDER_INFO', async ({ recipientId, senderInfo }) => {
+        const userId = acceptFriends.getAttribute('accept-friends')
+        if (userId === recipientId) {
+            const boxUserContainer = document.createElement('div')
+            boxUserContainer.classList.add('col-3')
+            boxUserContainer.setAttribute('user-id', senderInfo._id)
+
+            const htmlString = `
+            <div class="box-user">
+                <div class="inner-avatar"><img src="${senderInfo.avatar ? senderInfo.avatar : "/images/img_avatar.jpg"}" alt="${senderInfo.fullName}"></div>
+                <div class="inner-info">
+                    <div class="inner-name">${senderInfo.fullName}</div>
+                    <div class="inner-buttons">
+                        <button class="btn btn-sm btn-primary me-1" btn-confirm-request="${senderInfo._id}">Chấp nhận</button>
+                        <button class="btn btn-sm btn-primary me-1" btn-accepted-request="">Bạn bè</button>
+                        <button class="btn btn-sm btn-secondary me-1" btn-refuse-request="${senderInfo._id}">Từ chối</button>
+                        <button class="btn btn-sm btn-secondary me-1" btn-refused-request="">Đã từ chối</button>
+                    </div>
+                </div>
+            </div>
+            `
+            boxUserContainer.innerHTML = htmlString
+            acceptFriends.insertBefore(boxUserContainer, acceptFriends.firstChild)
+
+            // add event listener to new box user
+            // confirm friend request
+            const friendConfirmationButton = boxUserContainer.querySelector('button[btn-confirm-request]')
+            if (friendConfirmationButton) {
+                friendConfirmationButton.addEventListener('click', () => {
+                    const requestSenderId = friendConfirmationButton.getAttribute('btn-confirm-request')
+                    const userBox = friendConfirmationButton.closest('.box-user')
+                    userBox.classList.add('accepted')
+                    socket.emit('CLIENT_CONFIRM_REQUEST', requestSenderId)
+                })
+                
+            }
+            // refuse friend request
+            const friendRefusalButton = boxUserContainer.querySelector('button[btn-refuse-request]')
+            if (friendRefusalButton) {
+                friendRefusalButton.addEventListener('click', () => {
+                    const requestSenderId = friendRefusalButton.getAttribute('btn-refuse-request')
+                    const userBox = friendRefusalButton.closest('.box-user')
+                    userBox.classList.add('refuse')
+                    socket.emit('CLIENT_REFUSE_REQUEST', requestSenderId)
+                })
+            }
+        }
+    })
+}
+// End render friend request list realtime
 
 
