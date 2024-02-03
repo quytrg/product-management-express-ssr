@@ -54,4 +54,16 @@ if (friendRefusalButtonList) {
 }
 // End refuse friend request
 
-
+// Unfriend
+const unfriendButtonList = document.querySelectorAll('button[btn-unfriend]')
+if (unfriendButtonList) {
+    unfriendButtonList.forEach(button => {
+        button.addEventListener('click', () => {
+            const userBox = button.closest('.box-user')
+            userBox.classList.add('unfriend')
+            const recipientId = button.getAttribute('btn-unfriend')
+            socket.emit('CLIENT_UNFRIEND', recipientId)
+        })
+    })
+}
+// End unfriend

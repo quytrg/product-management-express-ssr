@@ -93,5 +93,14 @@ module.exports = async (res) => {
             await User.updateOne({ _id: userId }, { $pull: { acceptFriends: requestSenderId } })
         })
 
+        // unfriend
+        socket.on('CLIENT_UNFRIEND', async (recipientId) => {
+            // remove recipient id from user's friendList
+            await User.updateOne({ _id: userId }, { $pull: { friendList: { user_id: recipientId } } })
+            
+            // remove user id from recipient's friendList
+            await User.updateOne({ _id: recipientId }, { $pull: { friendList: { user_id: userId } } })
+        })
+
     });
 } 

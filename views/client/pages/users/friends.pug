@@ -22,12 +22,25 @@ block main
                             div(class='inner-name') #{user.fullName}
                             div(class='inner-buttons')
                                 button(
+                                    class='btn btn-sm btn-secondary me-1'
+                                    btn-unfriend=user.id
+                                ) Huỷ bạn bè
+                                button(
                                     class='btn btn-sm btn-primary me-1'
                                     btn-add-friend=user.id
+                                    btn-add-friend-again
                                 ) Thêm bạn bè
                                 button(
                                     class='btn btn-sm btn-secondary me-1'
                                     btn-cancel-friend=user.id
                                 ) Huỷ yêu cầu
+                                a(
+                                        href='/'
+                                )
+                                    button(
+                                        class='btn btn-sm btn-primary me-1'
+                                    ) Nhắn tin
+                                    
+                                
 block script 
     script(src="/client/js/users.js") 
