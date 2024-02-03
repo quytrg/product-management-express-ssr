@@ -147,3 +147,18 @@ if (acceptFriends) {
     })
 }
 // End remove sender info from recipient's 'accept list' 
+
+// Remove sender info from user list
+const userList = document.querySelector('[data-users-not-friend]')
+if (userList) {
+    socket.on('SERVER_ADD_FRIEND', async ({ recipientId, senderId }) => {
+        const userId = userList.getAttribute('data-users-not-friend')
+        if (userId === recipientId) {
+            const senderBox = userList.querySelector(`[user-id="${senderId}"]`)
+            if (senderBox) {
+                userList.removeChild(senderBox)
+            }
+        }
+    })
+}
+// End remove sender info from user list

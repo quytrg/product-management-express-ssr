@@ -44,6 +44,12 @@ module.exports = async (res) => {
                 recipientId,
                 senderInfo
             })
+
+            // emit an event to remove sender info from user list
+            socket.broadcast.emit('SERVER_ADD_FRIEND', {
+                recipientId,
+                senderId: userId
+            })
         })
 
         // cancel friend request
