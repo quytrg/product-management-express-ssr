@@ -67,3 +67,18 @@ if (unfriendButtonList) {
     })
 }
 // End unfriend
+
+// Friend request notification
+const friendRequestNoti = document.querySelector('span[badge-users-accept]')
+console.log(friendRequestNoti);
+if (friendRequestNoti) {
+    socket.on('SERVER_SEND_FRIEND_REQUEST_NOTIFICATION', async ({ recipientId, numRequest }) => {
+        const userId = friendRequestNoti.getAttribute('badge-users-accept')
+        if (userId === recipientId) {
+            friendRequestNoti.textContent = numRequest
+        }
+    })
+}
+// End friend request notification
+
+

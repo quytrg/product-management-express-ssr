@@ -13,10 +13,10 @@
             href='/users/request'
         ) Lời mời kết bạn đã gửi
         a(
-            class='btn btn-primary m-1'
+            class='btn btn-primary m-1 position-relative'
             href='/users/accept'
-        ) Yêu cầu kết bạn
-            //- span(
-            //-     class='badge badge-light'
-            //-     badge-users-accept=user.id
-            //- ) #{user.acceptFriends.length}
+        ) Yêu cầu kết bạn 
+            span(
+                class='position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger'
+                badge-users-accept=user.id
+            ) #{user.acceptFriends.length}

@@ -25,6 +25,16 @@ module.exports = async (res) => {
             if (!isExistInAcceptList) {
                 await User.updateOne({ _id: recipientId }, { $push: { acceptFriends: userId } })
             }
+
+            // emit friend request notification to recepient
+            const recepientInfo = await User.findOne({
+                _id: recipientId
+            })
+            const numRequest = recepientInfo.acceptFriends.length
+            socket.broadcast.emit('SERVER_SEND_FRIEND_REQUEST_NOTIFICATION', {
+                recipientId,
+                numRequest
+            })
         })
 
         // cancel friend request
