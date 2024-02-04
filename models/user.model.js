@@ -23,6 +23,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: 'active'
     },
+    onlineStatus: {
+        type: String,
+        default: 'online'
+    },
     deleted: {
         type: Boolean,
         default: false,

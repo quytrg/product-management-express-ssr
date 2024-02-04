@@ -162,3 +162,22 @@ if (userList) {
     })
 }
 // End remove sender info from user list
+
+// Display online tag 
+const friendList = document.querySelector('[data-friend]')
+if (friendList) {
+    socket.on('SERVER_SEND_ONLINE_STATUS', ({ userId }) => {
+        const userBox = friendList.querySelector('[online-status]')
+        userBox.setAttribute('online-status', 'online')
+    })
+}
+// End display online tag
+
+// Hide online tag
+if (friendList) {
+    socket.on('SERVER_SEND_OFFLINE_STATUS', ({ userId }) => {
+        const userBox = friendList.querySelector('[online-status]')
+        userBox.setAttribute('online-status', 'offline')
+    })
+}
+// End hide online tag

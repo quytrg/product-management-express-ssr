@@ -612,14 +612,18 @@
     display: none;
 }
 
-.box-user .inner-status {
-    font-size: 12px;
-    color: #00d800;
-    opacity: 0;
+/* End user list  */
+
+/* Online status */
+.box-user span {
+    background-color: #00d800;
+    width: 12px;
+    height: 12px;
+    margin: 10px;
+    opacity: 0;;
 }
 
-.box-user .inner-status[status='online'] {
+.box-user span[online-status='online'] {
     opacity: 1;
 }
-
-/* End user list  */
+/* End online status */

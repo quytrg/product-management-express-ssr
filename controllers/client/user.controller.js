@@ -9,6 +9,11 @@ const bcrypt = require('bcrypt');
 const generateHelper = require('../../helpers/generate')
 const sendEmailHelper = require('../../helpers/sendEmail')
 
+// sockets
+const onlineStatusSocket = require('../../sockets/client/online-status.socket')
+const offlineStatusSocket = require('../../sockets/client/offline-status.socket')
+
+
 // [GET] /user/register 
 module.exports.register = async (req, res) => {
     try {
@@ -97,6 +102,14 @@ module.exports.loginPost = async (req, res) => {
         )
 
         res.cookie('token', user.token, { expires: new Date(Date.now() + 86400000*3), httpOnly: true })
+
+        // set online status to user
+        await User.updateOne({ _id: user.id }, { onlineStatus: 'online' })
+        
+        // send online status to friend
+        res.locals.user = user
+        await onlineStatusSocket(res)
+
         res.redirect('/')
     }   
     catch(err) {
@@ -109,6 +122,13 @@ module.exports.loginPost = async (req, res) => {
 module.exports.logout = async (req, res) => {
     try {
         res.clearCookie('token')
+
+        // set offline status to user
+        await User.updateOne({ _id: res.locals.user }, { onlineStatus: 'offline' })
+
+        // send offline status to friend
+        await offlineStatusSocket(res)
+
         req.flash('successMessage', 'Đã đăng xuất khỏi tài khoản thành công!')
         res.redirect('/')
     }   
@@ -182,7 +202,7 @@ module.exports.otp = async (req, res) => {
     }
 }
 
-// [GET] /user/password/otp
+// [POST] /user/password/otp
 module.exports.otpPost = async (req, res) => {
     try {
         const isAuth = await ForgotPassword.findOne({
@@ -224,7 +244,7 @@ module.exports.resetPassword = async (req, res) => {
     }
 }
 
-// [GET] /user/password/reset
+// [POST] /user/password/reset
 module.exports.resetPasswordPost = async (req, res) => {
     try {
         const saltRounds = 10;
@@ -233,6 +253,10 @@ module.exports.resetPasswordPost = async (req, res) => {
         const token = req.cookies.token
 
         await User.updateOne({ token: token }, { password: req.body.password })
+
+        // send online status to friend
+        await onlineStatusSocket(res)
+
         req.flash('successMessage', 'Đổi mật khẩu thành công!')
         res.redirect('/')
     }   
