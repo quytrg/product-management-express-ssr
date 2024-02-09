@@ -1,0 +1,34 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+block main
+    .container.my-3
+        .row.mb-3
+            .col-12
+                +box-head('Danh sách nhóm chat')
+        .row.mb-3 
+            .col-12.mb-3
+                include ../../partials/friends-features-navbar.pug
+        .row.mb-3
+            .col-12
+                a(
+                    href='/chat-rooms/create'
+                    class='btn btn-sm btn-success mr-1'
+                ) Tạo nhóm 
+
+        .row.mb-3
+            .col-3
+                each group in groupList
+                    div(class='box-room')
+                        div(class='inner-avatar')
+                            img(
+                                src=(group.avatar ? group.avatar : 'https://robohash.org/hicveldicta.png')
+                                alt=group.title 
+                            )
+                        div(class='inner-info')
+                            div(class='inner-name') #{group.title}
+                            div(class='inner-buttons')
+                                a(
+                                    href=`/chat/${group.id}`
+                                    class='btn btn-sm btn-primary mr-1'
+                                ) Nhắn tin

@@ -6,6 +6,7 @@ const checkoutRouter = require('./checkout.route.js')
 const userRouter = require('./user.route.js')
 const chatRouter = require('./chat.route.js')
 const usersRouter = require('./users.route.js')
+const chatRoomsRouter = require('./chat-rooms.route.js')
 
 
 // middlewares
@@ -27,5 +28,6 @@ module.exports = (app) => {
     app.use('/user', userRouter)
     app.use('/chat', authMiddleware.requireAuth, chatRouter)
     app.use('/users', authMiddleware.requireAuth, usersRouter)
+    app.use('/chat-rooms', authMiddleware.requireAuth, chatRoomsRouter)
     app.use('/', homeRouter)
 }

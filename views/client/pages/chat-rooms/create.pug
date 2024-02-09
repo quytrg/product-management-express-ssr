@@ -1,0 +1,45 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+block main
+    .container.my-3
+        .row
+            .col-12
+                +box-head('Tạo nhóm chat')
+
+        .row
+            .col-12
+                form(
+                    action='/chat-rooms/create'
+                    method='POST'
+                )
+                    .mb-3
+                        label(for='title' class="form-label") Tên nhóm
+                        input(
+                            type='text'
+                            class='form-control'
+                            id='title'
+                            name='title'
+                            required
+                        )
+                    .mb-3
+                        label(class="form-label") Thêm thành viên
+                        each friend in friendList
+                            div(class='form-check')
+                                input(
+                                    class='form-check-input'
+                                    type='checkbox'
+                                    value=friend.user_id
+                                    id=`user-${friend.user_id}`
+                                    name='userIds'
+                                )
+                                label(
+                                    class='form-check-label'
+                                    for=`user-${friend.user_id}`
+                                ) #{friend.friendInfo.fullName}
+
+                    .mb-3
+                        button(
+                            type='submit'
+                            class='btn btn-primary'
+                        ) Tạo nhóm
