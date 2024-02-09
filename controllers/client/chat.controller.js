@@ -3,13 +3,15 @@ const User = require('../../models/user.model')
 
 const chatSocket = require('../../sockets/client/chat.socket')
 
-// [GET] /chat
+// [GET] /chat/:chatRoomId
 module.exports.index = async (req, res) => {
     try {
-        chatSocket(res)
+        chatSocket(req, res)
 
+        const chatRoomId = req.params.chatRoomId
         // load messages once access to route
         const chats = await Chat.find({
+            chat_room_id: chatRoomId,
             deleted: false,
         })
 

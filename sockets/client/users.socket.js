@@ -1,6 +1,5 @@
 const User = require('../../models/user.model')
-
-const generateHelper = require('../../helpers/generate')
+const ChatRoom = require('../../models/chat-room.model')
 
 module.exports = async (res) => {
     const userId = res.locals.user.id
@@ -86,15 +85,38 @@ module.exports = async (res) => {
             })
             if (!isExistInAcceptFriends) return
 
-            // generate a room chat id
-            const roomChatId = generateHelper.generateRandomString(20)
-
-            // add request sender id to user's friend list and
-            // remove request sender id from user's acceptFriends
+            // check if request sender id already exists in user's friend list
             const isExistInFriendListOfUser = await User.findOne({
                 _id: userId,
                 'friendList.user_id': requestSenderId
             })
+            // check if user id already exists in request sender's friend list
+            const isExistInFriendListOfSender = await User.findOne({
+                _id: requestSenderId,
+                'friendList.user_id': userId
+            })
+
+            let chatRoomId = ''
+            if (!isExistInFriendListOfUser && !isExistInFriendListOfSender) {
+                const chatRoom = new ChatRoom({
+                    roomType: 'friend',
+                    users: [
+                        {
+                            user_id: userId,
+                            role: 'superAdmin'
+                        },
+                        {
+                            user_id: requestSenderId,
+                            role: 'superAdmin'
+                        }
+                    ]
+                })
+                await chatRoom.save()
+                chatRoomId = chatRoom.id
+            }
+
+            // add request sender id to user's friend list and
+            // remove request sender id from user's acceptFriends
             if (!isExistInFriendListOfUser) {
                 await User.updateOne(
                     { _id: userId },
@@ -102,7 +124,7 @@ module.exports = async (res) => {
                         $push: {
                             friendList: {
                                 user_id: requestSenderId,
-                                room_chat_id: roomChatId,
+                                chat_room_id: chatRoomId,
                             },
                         },
                         $pull: { acceptFriends: requestSenderId },
@@ -112,10 +134,6 @@ module.exports = async (res) => {
 
             // add user id to request sender's friend list and
             // remove user id from request sender's requestFriends
-            const isExistInFriendListOfSender = await User.findOne({
-                _id: requestSenderId,
-                'friendList.user_id': userId
-            })
             if (!isExistInFriendListOfSender) {
                 await User.updateOne(
                     { _id: requestSenderId },
@@ -123,7 +141,7 @@ module.exports = async (res) => {
                         $push: {
                             friendList: {
                                 user_id: userId,
-                                room_chat_id: roomChatId,
+                                chat_room_id: chatRoomId,
                             },
                         },
                         $pull: { requestFriends: userId }

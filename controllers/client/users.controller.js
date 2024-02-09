@@ -97,6 +97,12 @@ module.exports.friends = async (req, res) => {
             status: 'active',
             deleted: false
         }).select('avatar fullName onlineStatus')
+
+        users.forEach(user => {
+            const userInfo = friendList.find(item => user.id === item.user_id)
+            user.chat_room_id = userInfo.chat_room_id
+        })
+
         res.render('client/pages/users/friends.pug',{
             titlePage: 'Friend List',
             users
